@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def get_path(file_path: str) -> str:
     from dotenv import load_dotenv
     from pathlib import Path

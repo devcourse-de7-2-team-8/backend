@@ -1,5 +1,5 @@
-from pipelines.test_pipeline import run_test_pipeline
+from pipelines.s3_upload_pipeline import run_s3_upload_pipeline
 
 
 def main():
-    run_test_pipeline()
+    run_s3_upload_pipeline()
