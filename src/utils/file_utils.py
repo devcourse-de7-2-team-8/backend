@@ -1,6 +1,7 @@
 def get_path(file_path: str) -> str:
     from dotenv import load_dotenv
     from pathlib import Path
+
     load_dotenv()
 
     project_root = Path(__file__).resolve().parents[2]
@@ -8,8 +9,9 @@ def get_path(file_path: str) -> str:
     return str((f"{project_root}/{file_path}"))
 
 
-def xlsx_to_csv(xlsx_path: str, output_path: str, *, skip_rows: int = 0,
-    rename_columns: dict = None):
+def xlsx_to_csv(
+    xlsx_path: str, output_path: str, *, skip_rows: int = 0, rename_columns: dict = None
+):
     import pandas as pd
 
     df = pd.read_excel(xlsx_path, skiprows=skip_rows, header=0)
@@ -18,4 +20,4 @@ def xlsx_to_csv(xlsx_path: str, output_path: str, *, skip_rows: int = 0,
     if rename_columns:
         df = df.rename(columns=rename_columns)
 
-    df.to_csv(output_path, index=False, encoding='utf-8-sig')
+    df.to_csv(output_path, index=False, encoding="utf-8-sig")
