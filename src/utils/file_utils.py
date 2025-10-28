@@ -1,6 +1,3 @@
-import pandas as pd
-
-
 def get_path(file_path: str) -> str:
     from dotenv import load_dotenv
     from pathlib import Path
@@ -13,6 +10,8 @@ def get_path(file_path: str) -> str:
 
 def xlsx_to_csv(xlsx_path: str, output_path: str, *, skip_rows: int = 0,
     rename_columns: dict = None):
+    import pandas as pd
+
     df = pd.read_excel(xlsx_path, skiprows=skip_rows, header=0)
     df.index = range(1, len(df) + 1)
 
