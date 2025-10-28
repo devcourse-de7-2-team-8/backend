@@ -14,9 +14,36 @@ uv run devcourse-project2
 
 - **uv:** for package management
 
-### .env file Structure (located in src/)
-
+### Project Structure
+```
+project
+├── README.md
+├── data
+│   ├── sessions
+│   └── stations
+├── pyproject.toml
+├── src
+│   ├── adhoc
+│   ├── common
+│   ├── devcourse_project2 -- main package
+│   │   └── __init__.py
+│   ├── pipelines
+│   ├── tasks
+│   └── utils
+└── uv.lock
 ```
 
+### .env file Structure (located in /)
+
+```
+SNOWFLAKE_ACCOUNT=
+SNOWFLAKE_USER=
+SNOWFLAKE_PASSWORD=
+SNOWFLAKE_WAREHOUSE=
+SNOWFLAKE_DATABASE=
+SNOWFLAKE_SCHEMA=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+S3_BUCKET_NAME=
 ```
 
