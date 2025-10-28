@@ -1,4 +1,4 @@
-﻿station_name,address,latitude,longitude,capacity_kw,num_total,num_slow,num_fast,num_outlet
+﻿station_name,address,latitude,longitude,capacity_kw,total_chargers,slow_chargers,fast_chargers,outlet_chargers
 강동구청,서울 강동구 성내로 25(강동구청),37.52983045781826,127.12484688146407,200,2,0,2,0
 도곡2동 주민센터,서울 강남구 남부순환로378길 34-9(도곡2동주민센터),37.483704069553625,127.04639624388588,100,1,0,1,0
 사당문화회관 부설주차장,서울 동작구 사당동 232-1,37.48411194605311,126.9676292993049,50,1,0,1,0
