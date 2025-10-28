@@ -1,5 +1,5 @@
-from common.base_tasks import Task
-from utils.file_utils import get_path
+from src.common.base_tasks import Task
+from src.utils.file_utils import get_path
 
 start_task = Task("start_task", lambda: print("Pipeline started"))
 get_file_path_task = Task("print_file_path",
