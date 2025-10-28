@@ -1,0 +1,22 @@
+[project]
+name = "devcourse-project2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Seonggil Jeong", email = "sgjeong1108@icloud.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "dotenv>=0.9.9",
+    "notebook>=7.4.7",
+    "pandas>=2.3.3",
+    "snowflake-connector-python>=4.0.0",
+]
+
+[project.scripts]
+devcourse-project2 = "devcourse_project2:main"
+
+[build-system]
+requires = ["uv_build>=0.8.22,<0.9.0"]
+build-backend = "uv_build"
