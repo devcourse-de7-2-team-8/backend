@@ -63,8 +63,9 @@ def upload_to_s3(local_paths: List[str]):
 
         try:
             s3.upload_file(path, BUCKET_NAME, s3_key)
+            print(f"업로드 완료: s3://{BUCKET_NAME}/{s3_key}")
         except Exception as e:
-            logging.WARN(f"Failed to upload {path} to S3: {e}")
+            logging.warning(f"Failed to upload {path} to S3: {e}")
 
 
 convert_session_task = Task("convert_session_task",
@@ -83,3 +84,8 @@ convert_station_task >> convert_session_task >> upload_to_s3_task
 
 def run_s3_upload_pipeline():
     convert_station_task.run()
+    
+if __name__ == "__main__":
+    print("S3 업로드 파이프라인 시작")
+    run_s3_upload_pipeline()
+    print(" S3 업로드 파이프라인 완료")
