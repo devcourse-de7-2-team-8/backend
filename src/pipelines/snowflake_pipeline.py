@@ -22,7 +22,7 @@ def copy_into_ev_charging_data(cur):
     """S3 → EV_CHARGING_DATA 단일 테이블 생성 및 적재"""
     cur.execute("""
         CREATE OR REPLACE TABLE PUBLIC.EV_CHARGING_DATA (
-            STATION_ID INTEGER AUTOINCREMENT,
+            STATION_ID INTEGER AUTOINCREMENT START 1,
             STATION_NAME VARCHAR,
             ADDRESS VARCHAR,
             LATITUDE FLOAT,
@@ -38,8 +38,11 @@ def copy_into_ev_charging_data(cur):
 
     cur.execute("""
         COPY INTO PUBLIC.EV_CHARGING_DATA
-        (STATION_NAME, ADDRESS, LATITUDE, LONGITUDE, TOTAL_CHARGERS, FAST_CHARGERS)
-        FROM @s3_stage/data/stations/seoul_station.csv;
+        (STATION_NAME, ADDRESS, LATITUDE, LONGITUDE, CAPACITY_KW,
+         TOTAL_CHARGERS, SLOW_CHARGERS, FAST_CHARGERS, OUTLET_CHARGERS)
+        FROM @s3_stage/data/stations/seoul_station.csv
+        FILE_FORMAT = (TYPE = CSV FIELD_OPTIONALLY_ENCLOSED_BY='"' SKIP_HEADER=1)
+        ON_ERROR = 'CONTINUE';
     """)
     print(" EV_CHARGING_DATA 단일 테이블 적재 완료!")
 
