@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from common.base_tasks import Task
 from utils.conn_utils import get_snowflake_conn
 
-def create_stage_and_external_table():
+def create_session_stage_external_table():
     load_dotenv()
     db     = os.getenv("SNOWFLAKE_DATABASE").upper()
     schema = os.getenv("SNOWFLAKE_SCHEMA").upper()
@@ -44,7 +44,7 @@ def create_stage_and_external_table():
     print("EV_SESSIONS_STAGE + SESSION_STG 생성 완료")
     conn.close()
 
-t = Task("create_stage_and_ext", create_stage_and_external_table)
+t = Task("create_session_stage_ext_table", create_session_stage_external_table)
 
 def run_session_stage_pipeline():
     t.run()
