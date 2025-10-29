@@ -18,10 +18,10 @@ def create_stage(cur, bucket, aws_key, aws_secret):
     print(f"Stage [s3_stage] 생성 완료 (Bucket: {bucket})")
 
 
-def copy_into_ev_charging_data(cur):
-    """S3 → EV_CHARGING_DATA 단일 테이블 생성 및 적재"""
+def copy_into_EV_CHARGING_STATIONS(cur):
+    """S3 → EV_CHARGING_STATIONS 단일 테이블 생성 및 적재"""
     cur.execute("""
-        CREATE OR REPLACE TABLE PUBLIC.EV_CHARGING_DATA (
+        CREATE OR REPLACE TABLE PUBLIC.EV_CHARGING_STATIONS (
             STATION_ID INTEGER AUTOINCREMENT START 1,
             STATION_NAME VARCHAR,
             ADDRESS VARCHAR,
@@ -37,14 +37,14 @@ def copy_into_ev_charging_data(cur):
     """)
 
     cur.execute("""
-        COPY INTO PUBLIC.EV_CHARGING_DATA
+        COPY INTO PUBLIC.EV_CHARGING_STATIONS
         (STATION_NAME, ADDRESS, LATITUDE, LONGITUDE, CAPACITY_KW,
          TOTAL_CHARGERS, SLOW_CHARGERS, FAST_CHARGERS, OUTLET_CHARGERS)
         FROM @s3_stage/data/stations/seoul_station.csv
         FILE_FORMAT = (TYPE = CSV FIELD_OPTIONALLY_ENCLOSED_BY='"' SKIP_HEADER=1)
         ON_ERROR = 'CONTINUE';
     """)
-    print(" EV_CHARGING_DATA 단일 테이블 적재 완료!")
+    print(" EV_CHARGING_STATIONS 단일 테이블 적재 완료!")
 
 
 def run_snowflake_pipeline():
@@ -76,8 +76,8 @@ def run_snowflake_pipeline():
         )
 
         load_task = Task(
-            "EV_CHARGING_DATA 적재",
-            lambda: copy_into_ev_charging_data(cur)
+            "EV_CHARGING_STATIONS 적재",
+            lambda: copy_into_EV_CHARGING_STATIONS(cur)
         )
 
         #  DAG 순서 설정 및 실행
