@@ -68,9 +68,7 @@ def validation_ev_charging_session_table():
 
 start_task = Task(
     "start_fact_ev_charging_session_table_pipeline",
-    lambda: logging.log(
-        logging.INFO, "Starting FACT_EV_CHARGING_SESSION table pipeline."
-    ),
+    lambda: print("Starting FACT_EV_CHARGING_SESSION table pipeline."),
 )
 check_table_exists_task = Task(
     "check_ev_charging_session_table_exists_task",
