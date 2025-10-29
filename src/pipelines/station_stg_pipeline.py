@@ -16,7 +16,7 @@ def create_station_stg():
     load_dotenv()
 
     DB     = os.getenv("SNOWFLAKE_DATABASE").upper()
-    SCHEMA = os.getenv("SNOWFLAKE_SCHEMA").upper()
+    SCHEMA = os.getenv("SNOWFLAKE_SCHEMA_RAW").upper()
     s3_bucket = os.getenv("S3_BUCKET_NAME")
     aws_key = os.getenv("AWS_ACCESS_KEY_ID")
     aws_secret = os.getenv("AWS_SECRET_ACCESS_KEY")

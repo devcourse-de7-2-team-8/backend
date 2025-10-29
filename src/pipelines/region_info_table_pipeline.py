@@ -6,7 +6,7 @@ from utils.conn_utils import get_snowflake_conn
 def create_region_info_table():
     load_dotenv()
     db     = os.getenv("SNOWFLAKE_DATABASE").upper()
-    schema_raw = os.getenv("SNOWFLAKE_SCHEMA").upper()
+    schema_raw = os.getenv("SNOWFLAKE_SCHEMA_RAW").upper()
     schema_pub   = os.getenv("SNOWFLAKE_SCHEMA_PUBLIC").upper()
 
     sqls = [
