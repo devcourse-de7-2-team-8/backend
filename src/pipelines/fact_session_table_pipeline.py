@@ -41,7 +41,7 @@ def create_if_not_exists_session_table(exists_table_flag: bool = False):
                                        s.end_time,
                                        s.charged_kwh
                                 FROM public.ev_charging_stations AS st
-	                                     LEFT JOIN raw_data.session_stg AS s
+	                                     LEFT JOIN raw.session_stg AS s
 	                                               ON s.station_name = st.station_name
                             )
 	                                              

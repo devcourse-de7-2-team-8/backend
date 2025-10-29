@@ -25,6 +25,7 @@ def copy_into_EV_CHARGING_STATIONS(cur):
             STATION_ID INTEGER AUTOINCREMENT START 1,
             STATION_NAME VARCHAR,
             ADDRESS VARCHAR,
+            REGION_ID INT,
             LATITUDE FLOAT,
             LONGITUDE FLOAT,
             CAPACITY_KW FLOAT,
@@ -45,6 +46,17 @@ def copy_into_EV_CHARGING_STATIONS(cur):
         ON_ERROR = 'CONTINUE';
     """)
     print(" EV_CHARGING_STATIONS 단일 테이블 적재 완료!")
+
+def update_region_mapping(cur):
+    """REGION_INFO 기준으로 REGION_ID 자동 매핑"""
+    cur.execute("""
+        UPDATE PUBLIC.EV_CHARGING_STATIONS AS s
+        SET REGION_ID = r.REGION_ID
+        FROM PUBLIC.REGION_INFO AS r
+        WHERE s.ADDRESS LIKE CONCAT('%', r.SIDO, '%')
+            AND s.ADDRESS LIKE CONCAT('%', r.GU, '%');
+    """)
+    print("REGION_INFO 기반 REGION_ID 매핑 완료")
 
 
 def run_snowflake_pipeline():
@@ -80,8 +92,13 @@ def run_snowflake_pipeline():
             lambda: copy_into_EV_CHARGING_STATIONS(cur)
         )
 
+        join_task = Task(
+            "Region FK 매핑",
+            lambda: update_region_mapping(cur)
+        )
+
         #  DAG 순서 설정 및 실행
-        stage_task >> load_task
+        stage_task >> load_task >> join_task
         stage_task.run()
 
         print("전체 Snowflake 파이프라인 완료 (통합 테이블 업로드 성공)")
