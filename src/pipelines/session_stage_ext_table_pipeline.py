@@ -41,7 +41,7 @@ def create_session_stage_external_table():
     with conn.cursor() as cur:
         for q in sqls:
             cur.execute(q)
-    print("EV_SESSIONS_STAGE + SESSION_STG 생성 완료")
+    print("RAW 스키마에 EV_SESSIONS_STAGE + SESSION_STG 생성 완료")
     conn.close()
 
 t = Task("create_session_stage_ext_table", create_session_stage_external_table)
