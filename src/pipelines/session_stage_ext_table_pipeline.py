@@ -6,7 +6,7 @@ from utils.conn_utils import get_snowflake_conn
 def create_session_stage_external_table():
     load_dotenv()
     db     = os.getenv("SNOWFLAKE_DATABASE").upper()
-    schema = os.getenv("SNOWFLAKE_SCHEMA").upper()
+    schema = os.getenv("SNOWFLAKE_SCHEMA_RAW").upper()
     bucket = os.getenv("S3_BUCKET_NAME")
     aws_k  = os.getenv("AWS_ACCESS_KEY_ID")
     aws_s  = os.getenv("AWS_SECRET_ACCESS_KEY")
