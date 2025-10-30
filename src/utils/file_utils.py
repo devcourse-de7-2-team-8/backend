@@ -1,6 +1,7 @@
 def get_path(file_path: str) -> str:
-    from dotenv import load_dotenv
     from pathlib import Path
+
+    from dotenv import load_dotenv
 
     load_dotenv()
 
@@ -21,3 +22,17 @@ def xlsx_to_csv(
         df = df.rename(columns=rename_columns)
 
     df.to_csv(output_path, index=False, encoding="utf-8-sig")
+
+
+def xlsx_to_parquet(
+    xlsx_path: str, output_path: str, skip_rows: int = 0, rename_columns: dict = None
+):
+    import pandas as pd
+
+    df = pd.read_excel(xlsx_path, skiprows=skip_rows, header=0)
+    df.index = range(1, len(df) + 1)
+
+    if rename_columns:
+        df = df.rename(columns=rename_columns)
+
+    df.to_parquet(output_path, index=False, compression="zstd")
