@@ -27,7 +27,7 @@ def is_exists_ev_charging_session_table():
         cur.execute(f"""
                     SELECT COUNT(*)
                     FROM information_schema.tables
-                    WHERE table_schema = {PUBLIC_SCHEMA}
+                    WHERE table_schema = '{PUBLIC_SCHEMA}'
 	                  AND table_name = 'EV_CHARGING_SESSIONS'
                     """)
         result = cur.fetchone()[0]
