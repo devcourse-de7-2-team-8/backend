@@ -152,6 +152,57 @@ def create_analytics_station_count_table():
 
     print(f"{ANALYTICS_SCHEMA}.STATION_COUNT_BY_GU 테이블 생성 완료!")
 
+def create_avg_kwh_by_gu_table():
+    """
+    구(gu)별 평균 충전량을 계산하여 Snowflake Analytics 스키마에 저장
+    """
+    table_name = "AVG_KWH_BY_GU"
+
+    sql = f"""
+    CREATE OR REPLACE TABLE {DB}.{ANALYTICS_SCHEMA}.{table_name} AS
+    SELECT
+        r.gu,
+        ROUND(AVG(s.charged_kwh), 2) AS avg_kwh,
+        COUNT(*) AS total_sessions
+    FROM {DB}.{PUBLIC_SCHEMA}.EV_CHARGING_SESSIONS s
+    JOIN {DB}.{PUBLIC_SCHEMA}.EV_CHARGING_STATIONS st
+        ON s.station_id = st.station_id
+    JOIN {DB}.{PUBLIC_SCHEMA}.REGION_INFO r
+        ON st.region_id = r.region_id
+    WHERE s.charged_kwh IS NOT NULL
+    GROUP BY r.gu
+    ORDER BY avg_kwh DESC;
+    """
+
+    with conn.cursor() as cur:
+        cur.execute(sql)
+    print(f"{ANALYTICS_SCHEMA}.{table_name} 테이블 생성 완료 (구별 평균 충전량)")
+
+def create_usage_by_hour_table():
+    """
+    시간대별 충전량 합계를 계산하여 Snowflake Analytics 스키마에 저장
+    """
+    table_name = "USAGE_BY_HOUR"
+
+    sql = f"""
+    CREATE OR REPLACE TABLE {DB}.{ANALYTICS_SCHEMA}.{table_name} AS
+    SELECT
+        EXTRACT(HOUR FROM s.start_time) AS hour_of_day,
+        ROUND(SUM(s.charged_kwh), 2) AS total_charged_kwh,
+        COUNT(*) AS session_count
+    FROM {DB}.{PUBLIC_SCHEMA}.EV_CHARGING_SESSIONS s
+    WHERE s.start_time IS NOT NULL
+      AND s.charged_kwh IS NOT NULL
+    GROUP BY hour_of_day
+    ORDER BY hour_of_day;
+    """
+
+    with conn.cursor() as cur:
+        cur.execute(sql)
+    print(f"{ANALYTICS_SCHEMA}.{table_name} 테이블 생성 완료 (시간대별 이용량)")
+
+avg_kwh_by_gu_task = Task("create_avg_kwh_by_gu_table", create_avg_kwh_by_gu_table)
+usage_by_hour_task = Task("create_usage_by_hour_table", create_usage_by_hour_table)
 
 analytics_station_count_task = Task(
     "create_analytics_station_count_table", create_analytics_station_count_table
@@ -165,7 +216,7 @@ region_monthly_session_summary_task = Task("create_region_monthly_session_summar
 
 analytics_station_utilization_task = Task("create_analytics_station_utilization_table", create_analytics_station_utilization_table)
 
-analytics_station_utilization_task >> region_monthly_session_summary_task >> analytics_station_count_task
+analytics_station_utilization_task >> region_monthly_session_summary_task >> analytics_station_count_task >> avg_kwh_by_gu_task >> usage_by_hour_task
 
 
 def run_analytics_station_utilization_pipeline():
