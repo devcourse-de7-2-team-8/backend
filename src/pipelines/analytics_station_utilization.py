@@ -122,6 +122,42 @@ def create_region_monthly_session_summary_table():
     logging.log(logging.INFO, f"Table {ANALYTICS_SCHEMA}.{table_name} created successfully.")
 
 
+def create_analytics_station_count_table():
+    load_dotenv()
+
+    sqls = [
+        f"USE DATABASE {DB}",
+        f"CREATE SCHEMA IF NOT EXISTS {ANALYTICS_SCHEMA}",
+        f"""
+        CREATE OR REPLACE TABLE {DB}.{ANALYTICS_SCHEMA}.STATION_BY_GU AS
+        SELECT 
+            "GU_SHORT" AS "GU_SHORT",
+            "STATION_COUNT" AS "STATION_COUNT"
+        FROM (
+            SELECT
+                SPLIT_PART(address, ' ', 2) AS gu_short,
+                COUNT(*) AS station_count
+            FROM {DB}.{PUBLIC_SCHEMA}.EV_CHARGING_STATIONS
+            WHERE address LIKE '서울%%'
+            GROUP BY gu_short
+            ORDER BY station_count DESC
+        ) AS virtual_table
+        LIMIT 1000
+        """,
+    ]
+
+    with conn.cursor() as cur:
+        for q in sqls:
+            cur.execute(q)
+
+    print(f"{ANALYTICS_SCHEMA}.STATION_COUNT_BY_GU 테이블 생성 완료!")
+
+
+analytics_station_count_task = Task(
+    "create_analytics_station_count_table", create_analytics_station_count_table
+)
+
+
 
 region_monthly_session_summary_task = Task("create_region_monthly_session_summary_table",
                                            lambda : create_region_monthly_session_summary_table())
@@ -129,7 +165,7 @@ region_monthly_session_summary_task = Task("create_region_monthly_session_summar
 
 analytics_station_utilization_task = Task("create_analytics_station_utilization_table", create_analytics_station_utilization_table)
 
-analytics_station_utilization_task >> region_monthly_session_summary_task
+analytics_station_utilization_task >> region_monthly_session_summary_task >> analytics_station_count_task
 
 
 def run_analytics_station_utilization_pipeline():
