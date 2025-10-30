@@ -71,7 +71,7 @@ def run_snowflake_pipeline():
             account=os.getenv("SNOWFLAKE_ACCOUNT"),
             warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),
             database=os.getenv("SNOWFLAKE_DATABASE"),
-            schema=os.getenv("SNOWFLAKE_SCHEMA")
+            schema=os.getenv("SNOWFLAKE_SCHEMA_RAW")
         )
         cur = conn.cursor()
         print("Snowflake 연결 성공")

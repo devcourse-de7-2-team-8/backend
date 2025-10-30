@@ -1,4 +1,7 @@
 import logging
+import os
+
+from dotenv import load_dotenv
 
 from common.base_tasks import Task
 from utils.conn_utils import get_snowflake_conn
@@ -12,15 +15,19 @@ Related Tables: RAW_DATA.session_stg, PUBLIC.ev_charging_station
 @author: Seonggil Jeong
 """
 
+load_dotenv()
 conn = get_snowflake_conn()
+PUBLIC_SCHEMA = os.getenv("SNOWFLAKE_SCHEMA_PUBLIC")
+RAW_SCHEMA = os.getenv("SNOWFLAKE_SCHEMA_RAW")
+
 
 
 def is_exists_ev_charging_session_table():
     with conn.cursor() as cur:
-        cur.execute("""
+        cur.execute(f"""
                     SELECT COUNT(*)
                     FROM information_schema.tables
-                    WHERE table_schema = 'PUBLIC'
+                    WHERE table_schema = '{PUBLIC_SCHEMA}'
 	                  AND table_name = 'EV_CHARGING_SESSIONS'
                     """)
         result = cur.fetchone()[0]
@@ -33,15 +40,15 @@ def create_if_not_exists_session_table(exists_table_flag: bool = False):
         return
 
     with conn.cursor() as cur:
-        cur.execute("""
+        cur.execute(f"""
                 CREATE TABLE PUBLIC.EV_CHARGING_SESSIONS
                             AS (SELECT st.station_id,
                                        st.station_name,
                                        s.start_time,
                                        s.end_time,
                                        s.charged_kwh
-                                FROM public.ev_charging_stations AS st
-	                                     LEFT JOIN raw.session_stg AS s
+                                FROM {PUBLIC_SCHEMA}.ev_charging_stations AS st
+	                                     LEFT JOIN {RAW_SCHEMA}.session_stg AS s
 	                                               ON s.station_name = st.station_name
                             )
 	                                              
@@ -50,9 +57,9 @@ def create_if_not_exists_session_table(exists_table_flag: bool = False):
 
 def validation_ev_charging_session_table():
     with conn.cursor() as cur:
-        expected_zero = cur.execute("""
+        expected_zero = cur.execute(f"""
 		                            SELECT COUNT(1)
-		                            FROM public.ev_charging_sessions AS s
+		                            FROM {PUBLIC_SCHEMA}.ev_charging_sessions AS s
 		                            WHERE s.station_id IS NULL""").fetchone()
         if expected_zero is not None and expected_zero[0] == 0:
             logging.log(
@@ -68,9 +75,7 @@ def validation_ev_charging_session_table():
 
 start_task = Task(
     "start_fact_ev_charging_session_table_pipeline",
-    lambda: logging.log(
-        logging.INFO, "Starting FACT_EV_CHARGING_SESSION table pipeline."
-    ),
+    lambda: print("Starting FACT_EV_CHARGING_SESSION table pipeline."),
 )
 check_table_exists_task = Task(
     "check_ev_charging_session_table_exists_task",
