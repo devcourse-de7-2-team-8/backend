@@ -97,3 +97,5 @@ start_task >> check_table_exists_task >> create_table_task >> validate_table_tas
 
 def run_create_ev_charging_sessions_table_pipeline():
     start_task.run()
+
+    conn.close()
