@@ -41,9 +41,9 @@ CREATE OR REPLACE TABLE RAW_DATA.station_stg (
 # S3 → Snowflake COPY INTO
 cur.execute(f"""
 COPY INTO raw_data.station_stg
-FROM 's3://{s3_bucket}/data/stations/seoul_station.csv'
+FROM 's3://{s3_bucket}/data/stations/seoul_station.parquet'
 CREDENTIALS=(AWS_KEY_ID='{aws_key}' AWS_SECRET_KEY='{aws_secret}')
-FILE_FORMAT=(TYPE=CSV FIELD_OPTIONALLY_ENCLOSED_BY='"' SKIP_HEADER=1);
+FILE_FORMAT=(TYPE = PARQUET);
 """)
 
 print("raw_data.station_stg 테이블 생성 및 S3 데이터 로드 완료!")
