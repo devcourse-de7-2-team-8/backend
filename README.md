@@ -1,8 +1,9 @@
-# ⚡서울시 소유 전기차 충전소 데이터 시각화 대시보드 
+# <p align="center">⚡서울시 소유 전기차 충전소 데이터 시각화 대시보드 </p>
 
 <p align="center">
   <img src="https://github.com/Lepus0T/report/blob/main/dashboard_visual.png?raw=true" 
-       width="400" 
+       width="400"
+       height="300"
        alt="Dashboard Visualization">
 </p>
 
@@ -12,13 +13,10 @@
 
 ## <p align="center">⚙️기술 및 프레임워크 </p>
 ### Data Collection
-전기차 충전 기록정보
 
 [서울시 소유 전기차충전기 일별 시간별 충전현황(2024년).xlsx](https://github.com/user-attachments/files/23251371/2024.xlsx)
 
-[서울시 소유 전기차 충전기 일별 시간별 충전현황(8월말까지) (1).xlsx](https://github.com/user-attachments/files/23251373/8.1.xlsx)
-
-전기차 충전소 위치정보
+[서울시 소유 전기차 충전기 일별 시간별 충전현황(8월말까지).xlsx](https://github.com/user-attachments/files/23251373/8.1.xlsx)
 
 [서울시 전기차 충전소 정보(8월말 기준).xlsx](https://github.com/user-attachments/files/23251375/8.xlsx)
 
@@ -39,6 +37,14 @@
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
+
+## <p align="center">📝기술 구조도 및 ERD</p>
+
+<div align="center" style="display: flex; justify-content: center; gap: 10px;">
+  <img src="https://github.com/Lepus0T/report/blob/main/stack_structure.png?raw=true" width="48%" alt="기술 구조도">
+  <img src="https://github.com/Lepus0T/report/blob/main/ERD.png?raw=true" width="48%" alt="ERD">
+</div>
+
 
 ## Setup DATA
 
