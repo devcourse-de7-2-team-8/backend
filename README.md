@@ -43,12 +43,12 @@
 
 <div align="center" style="display: flex; justify-content: center; gap: 10px;">
   <img src="https://github.com/Lepus0T/report/blob/main/stack_structure.png?raw=true" width="48%" alt="기술 구조도">
-  <img src="https://github.com/Lepus0T/report/blob/main/ERD.png?raw=true" width="48%" alt="ERD">
+  <img src="https://github.com/Lepus0T/report/blob/main/image%20(2).png?raw=true" width="48%" alt="ERD">
 </div>
 
 ## <p align="center"> 👨‍💻프로젝트 세부 내용 및 구조</p>
 ### 데이터 수집 및 전처리
-- S3 Structure
+## S3 Structure
 ```
 data/
 ├── stations/ # 충전소별 위치 정보
@@ -59,7 +59,10 @@ data/
 └── year=2025/
 └── ev_charging_session.parquet
 ```
-- Medallion 아키텍처
+- 서울시 전기차 충전소 및 충전 이력 데이터를 연도별·유형별로 분류해 S3에 저장.
+- Parquet 포맷으로 변환되어 Snowflake Stage와 연동되어 효율적인 ETL이 가능.
+
+## Medallion 아키텍처
 ```
 [Raw Data] (S3)
 ├── stations/seoul_station.parquet
@@ -81,7 +84,12 @@ data/
 ├── STATION_UTILIZATION_GU
 ├── AVG_KWH_BY_GU
 ```
-### 디렉토리 구조
+- 원본 데이터(xlsx)를 수집 후 Pandas로 전처리하여 Parguet 형식으로 변환, AWS S3에 저장.
+- Snowflake의 Stage를 통해 데이터를 적재.
+- Bronze(S3 원시 데이터) -> Silver(정제/조인된 데이터) -> Gold(집계·시각화용 데이터) 순으로 변환되는 ETL Flow를 구성.
+- 최종적으로 Superset에서 Gold Layer 데이터를 시각화 대시보드로 표현.
+  
+## 디렉토리 구조
 ```/src
 ├── common # 코딩 컨벤션 통일을 위한 Frame
 │   └── base_tasks.py
@@ -97,6 +105,8 @@ data/
     ├── conn_utils.py
     └── file_utils.py
 ```
+- 디렉토리는 ETL/ELT 파이프라인 구조에 맞춰 모듈화되어 있음
+- **common**에서 Task 기반 프레임워크를 정의하고, **piplines**와 **task**에서 단계별 데이터 흐름을 관리합니다.
 
 ## <p align="center"> 📊프로젝트 결과</p>
 
