@@ -7,6 +7,28 @@
        alt="Dashboard Visualization">
 </p>
 
+## ⚙️ Setup DATA
+> 프로젝트 실행 및 환경 세팅을 위한 명령어입니다.
+
+```bash
+uv sync            # 의존성 설치
+uv run devcourse-project2   # 메인 파이프라인 실행
+```
+### 🌿 .env file Structure (located in project root)
+
+```bash
+SNOWFLAKE_ACCOUNT=
+SNOWFLAKE_USER=
+SNOWFLAKE_PASSWORD=
+SNOWFLAKE_WAREHOUSE=
+SNOWFLAKE_DATABASE=
+SNOWFLAKE_SCHEMA_RAW=
+SNOWFLAKE_SCHEMA_ANALYTICS=
+SNOWFLAKE_SCHEMA_PUBLIC=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+S3_BUCKET_NAME=
+```
 ## <p align="center">💡프로젝트 목표 </p>
 - 이 프로젝트는 서울시 소유 전기차 충전소 데이터를 시각화하여 사용자에게 유용한 정보를 제공하는 대시보드를 개발하는 것을 목표로 합니다.  
 - 대시보드는 충전소 위치, 사용 현황, 충전 이용 등 다양한 데이터를 시각적으로 표현하여 사용자 경험을 향상시킵니다.
@@ -39,30 +61,6 @@
 ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 <img src="https://img.shields.io/badge/uv-DE5FE9?style=for-the-badge&logo=uv&logoColor=black">
-
-
-## ⚙️ Setup DATA
-> 프로젝트 실행 및 환경 세팅을 위한 명령어입니다.
-
-```bash
-uv sync            # 의존성 설치
-uv run devcourse-project2   # 메인 파이프라인 실행
-```
-### 🌿 .env file Structure (located in project root)
-
-```bash
-SNOWFLAKE_ACCOUNT=
-SNOWFLAKE_USER=
-SNOWFLAKE_PASSWORD=
-SNOWFLAKE_WAREHOUSE=
-SNOWFLAKE_DATABASE=
-SNOWFLAKE_SCHEMA_RAW=
-SNOWFLAKE_SCHEMA_ANALYTICS=
-SNOWFLAKE_SCHEMA_PUBLIC=
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-S3_BUCKET_NAME=
-```
 
 ## <p align="center">📝기술 구조도 및 ERD</p>
 
