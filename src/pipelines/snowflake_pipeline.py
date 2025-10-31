@@ -1,6 +1,8 @@
 import os
+
 import snowflake.connector
 from dotenv import load_dotenv
+
 from common.base_tasks import Task
 
 
@@ -13,7 +15,7 @@ def create_stage(cur, bucket, aws_key, aws_secret):
             AWS_KEY_ID='{aws_key}'
             AWS_SECRET_KEY='{aws_secret}'
         )
-        FILE_FORMAT = (TYPE = CSV FIELD_OPTIONALLY_ENCLOSED_BY='"' SKIP_HEADER=1);
+        ;
     """)
     print(f"Stage [s3_stage] 생성 완료 (Bucket: {bucket})")
 
@@ -39,13 +41,23 @@ def copy_into_EV_CHARGING_STATIONS(cur):
 
     cur.execute("""
         COPY INTO PUBLIC.EV_CHARGING_STATIONS
-        (STATION_NAME, ADDRESS, LATITUDE, LONGITUDE, CAPACITY_KW,
-         TOTAL_CHARGERS, SLOW_CHARGERS, FAST_CHARGERS, OUTLET_CHARGERS)
-        FROM @s3_stage/data/stations/seoul_station.csv
-        FILE_FORMAT = (TYPE = CSV FIELD_OPTIONALLY_ENCLOSED_BY='"' SKIP_HEADER=1)
-        ON_ERROR = 'CONTINUE';
+        FROM @s3_stage/data/stations/
+        FILE_FORMAT = (TYPE = PARQUET)
+        MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
     """)
     print(" EV_CHARGING_STATIONS 단일 테이블 적재 완료!")
+
+    cur.execute("""
+                CREATE OR REPLACE SEQUENCE STATION_ID_SEQ START = 1 INCREMENT = 1;
+    """)
+
+    cur.execute("""
+        UPDATE PUBLIC.EV_CHARGING_STATIONS
+            SET STATION_ID = STATION_ID_SEQ.NEXTVAL, 
+            CREATED_AT = COALESCE(CREATED_AT, CURRENT_TIMESTAMP())
+        WHERE STATION_ID IS NULL;
+    """)
+
 
 def update_region_mapping(cur):
     """REGION_INFO 기준으로 REGION_ID 자동 매핑"""
@@ -71,7 +83,7 @@ def run_snowflake_pipeline():
             account=os.getenv("SNOWFLAKE_ACCOUNT"),
             warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),
             database=os.getenv("SNOWFLAKE_DATABASE"),
-            schema=os.getenv("SNOWFLAKE_SCHEMA_RAW")
+            schema=os.getenv("SNOWFLAKE_SCHEMA_RAW"),
         )
         cur = conn.cursor()
         print("Snowflake 연결 성공")
@@ -83,19 +95,15 @@ def run_snowflake_pipeline():
                 cur,
                 os.getenv("S3_BUCKET_NAME"),
                 os.getenv("AWS_ACCESS_KEY_ID"),
-                os.getenv("AWS_SECRET_ACCESS_KEY")
-            )
+                os.getenv("AWS_SECRET_ACCESS_KEY"),
+            ),
         )
 
         load_task = Task(
-            "EV_CHARGING_STATIONS 적재",
-            lambda: copy_into_EV_CHARGING_STATIONS(cur)
+            "EV_CHARGING_STATIONS 적재", lambda: copy_into_EV_CHARGING_STATIONS(cur)
         )
 
-        join_task = Task(
-            "Region FK 매핑",
-            lambda: update_region_mapping(cur)
-        )
+        join_task = Task("Region FK 매핑", lambda: update_region_mapping(cur))
 
         #  DAG 순서 설정 및 실행
         stage_task >> load_task >> join_task
