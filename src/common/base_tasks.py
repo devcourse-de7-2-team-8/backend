@@ -15,10 +15,11 @@ class Task:
 
     def run(self, executed=None):
         if executed is None:
+            print("=== Starting pipeline execution... ===")
             executed = set()
         if self.name in executed:
             return self.result
-
+        print("RUNNING TASK:", self.name)
         self.result = self.func()
         executed.add(self.name)
 
