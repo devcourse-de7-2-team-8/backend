@@ -40,6 +40,30 @@
 ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 <img src="https://img.shields.io/badge/uv-DE5FE9?style=for-the-badge&logo=uv&logoColor=black">
 
+
+## ⚙️ Setup DATA
+> 프로젝트 실행 및 환경 세팅을 위한 명령어입니다.
+
+```bash
+uv sync            # 의존성 설치
+uv run devcourse-project2   # 메인 파이프라인 실행
+```
+### 🌿 .env file Structure (located in project root)
+
+```bash
+SNOWFLAKE_ACCOUNT=
+SNOWFLAKE_USER=
+SNOWFLAKE_PASSWORD=
+SNOWFLAKE_WAREHOUSE=
+SNOWFLAKE_DATABASE=
+SNOWFLAKE_SCHEMA_RAW=
+SNOWFLAKE_SCHEMA_ANALYTICS=
+SNOWFLAKE_SCHEMA_PUBLIC=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+S3_BUCKET_NAME=
+```
+
 ## <p align="center">📝기술 구조도 및 ERD</p>
 
 <div align="center" style="display: flex; justify-content: center; gap: 10px;">
@@ -122,4 +146,6 @@ data/
 - 구별 충전소 수
 - 구별 전기차 충전소 가동률
 <img src="https://github.com/Lepus0T/report/blob/main/screencapture-localhost-8088-superset-dashboard-17-2025-10-31-13_56_15.png?raw=true">
+
+
 
