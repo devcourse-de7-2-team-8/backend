@@ -8,11 +8,13 @@
 </p>
 
 ## ⚙️ Setup DATA
-> 프로젝트 실행 및 환경 세팅을 위한 명령어입니다.
+> Snowflake, AWS S3, uv 환경설정 후 프로젝트를 로컬에 클론하여 실행합니다.  
+> _시각화에 사용되는 모든 데이터가 순차적으로 Snowflake에 적재됩니다._
 
 ```bash
-uv sync            # 의존성 설치
-uv run devcourse-project2   # 메인 파이프라인 실행
+git clone https://github.com/devcourse-de7-2-team-8/backend.git
+uv sync            
+uv run devcourse-project2
 ```
 ### 🌿 .env file Structure (located in project root)
 
@@ -34,7 +36,7 @@ S3_BUCKET_NAME=
 - 대시보드는 충전소 위치, 사용 현황, 충전 이용 등 다양한 데이터를 시각적으로 표현하여 사용자 경험을 향상시킵니다.
 
 ## <p align="center">⚙️기술 및 프레임워크 </p>
-### 📂Data Collection
+### 📂Base Data
 - **서울시 전기차 충전 기록 정보**
   - [서울시 소유 전기차충전기 일별 시간별 충전현황(2024년).xlsx](https://github.com/user-attachments/files/XXXXX/2024.xlsx)
   - [서울시 소유 전기차 충전기 일별 시간별 충전현황(8월말까지).xlsx](https://github.com/user-attachments/files/YYYY/8m.xlsx)
@@ -44,16 +46,20 @@ S3_BUCKET_NAME=
 
 
 ### 🧹Data Preprocessing
+
 ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
 <img src="https://img.shields.io/badge/ApacheParquet-50ABF1?style=for-the-badge&logo=ApachParquet&logoColor=black">
 
 ### ☁️Data Lake
+
 ![Amazon S3](https://img.shields.io/badge/Amazon%20S3-FF9900?style=for-the-badge&logo=amazons3&logoColor=white)
 
 ### 🧊Data Warehouse
+
 ![Snowflake](https://img.shields.io/badge/snowflake-%2329B5E8.svg?style=for-the-badge&logo=snowflake&logoColor=white)
 
 ### 📊Visualization
+
 <img src="https://img.shields.io/badge/ApacheSuperset-20A6C9?style=for-the-badge&logo=ApacheSuperset&logoColor=black">
 
 ### Team Management
