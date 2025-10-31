@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 from typing import (
@@ -7,13 +8,12 @@ from typing import (
 from common.base_tasks import (
     Task,
 )
-from tasks.convert_xlsx_to_parquet import (
-    run_convert_pipeline,
-)
-from utils.conn_utils import (
-    get_s3_conn,
-)
+from tasks.convert_xlsx_to_parquet import async_convert_session_stations
+from utils.conn_utils import get_s3_conn
 
+
+def run_convert_csv_to_parquet():
+    return asyncio.run(async_convert_session_stations())
 
 def upload_to_s3(local_paths: List[str]):
     s3 = get_s3_conn()
@@ -30,7 +30,7 @@ def upload_to_s3(local_paths: List[str]):
 
 convert_to_parquet_task = Task(
     "convert_to_parquet_task",
-    run_convert_pipeline,
+    lambda : run_convert_csv_to_parquet(),
 )
 
 upload_to_s3_task = Task(
